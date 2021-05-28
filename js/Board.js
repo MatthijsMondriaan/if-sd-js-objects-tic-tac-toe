@@ -14,6 +14,9 @@ export default class Board {
     let board = document.querySelector(".board");
     board.innerHTML = "";
     board.style.gridTemplateColumns = `repeat(${this.width}, 1fr)`;
+
+    document.querySelector(".popup").textContent = "";
+
     for (let x = 0; x < this.width; x++) {
       this.fieldNodes[x] = [];
       for (let y = 0; y < this.height; y++) {
@@ -25,10 +28,10 @@ export default class Board {
         field.addEventListener("click", (event) => {
           this.onFieldClick(event);
         });
+
         field.className = "field";
         this.fieldNodes[x][y] = field;
         board.appendChild(field);
-        // this.fields.push(new Field(x, y, field));
       }
     }
   }
@@ -37,7 +40,9 @@ export default class Board {
     if (!event.target.textContent) {
       event.target.textContent = this.context.currentPlayer.symbol;
       event.target.dataset.obj = this.context.currentPlayer.symbol;
+
       this.checkWinner(this.context.currentPlayer.symbol);
+
       if (this.context.currentPlayer.symbol === this.context.player1.symbol) {
         this.context.currentPlayer = this.context.player2;
       } else {
@@ -49,7 +54,7 @@ export default class Board {
   //check if there is three in a row...
   checkWinner(obj) {
     let winner = "";
-    // console.log(this.fields);
+
     if (
       (this.fieldNodes[0][0].dataset.obj == obj &&
         this.fieldNodes[1][1].dataset.obj == obj &&
@@ -74,12 +79,16 @@ export default class Board {
         this.fieldNodes[2][i].dataset.obj === obj
       ) {
         winner = obj;
-      }
+      } 
     }
+
+    document.querySelector(".popup").textContent = "Draw";
+    
+    console.log("Winner is: " + obj)
 
     if (winner) {
       document.querySelector(".popup").textContent = `Winner: ${winner}`;
-    }
+    } 
 
     return false;
   }
